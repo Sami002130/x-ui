@@ -3,70 +3,143 @@
 {{template "head" .}}
 <style>
     #app {
-        padding-top: 100px;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .login-container {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        max-width: 400px;
+        width: 100%;
+        animation: fadeInUp 0.5s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     h1 {
         text-align: center;
         color: #fff;
-        margin: 20px 0 50px 0;
+        margin: 0 0 30px 0;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        font-size: 28px;
+    }
+
+    .ant-form-item {
+        margin-bottom: 24px;
     }
 
     .ant-btn,
     .ant-input {
         height: 50px;
-        border-radius: 30px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .ant-input-affix-wrapper {
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .ant-input-affix-wrapper:hover {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+    }
+
+    .ant-input-affix-wrapper:focus,
+    .ant-input-affix-wrapper-focused {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
     }
 
     .ant-input-affix-wrapper .ant-input-prefix {
-        left: 23px;
+        left: 16px;
     }
 
     .ant-input-affix-wrapper .ant-input:not(:first-child) {
-        padding-left: 50px;
+        padding-left: 45px;
+    }
+
+    .login-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        height: 50px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+    }
+
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+
+    .input-icon {
+        color: rgba(255, 255, 255, 0.6) !important;
     }
 </style>
 
 <body>
     <a-layout id="app" v-cloak>
-        <transition name="list" appear>
-            <a-layout-content>
-                <a-row type="flex" justify="center">
-                    <a-col :xs="22" :sm="20" :md="16" :lg="12" :xl="8">
-                        <h1>{{ .title }}</h1>
-                    </a-col>
-                </a-row>
-                <a-row type="flex" justify="center">
-                    <a-col :xs="22" :sm="20" :md="16" :lg="12" :xl="8">
-                        <a-form>
-                            <a-form-item>
-                                <a-input v-model.trim="user.username" placeholder='{{ i18n "username" }}'
-                                    @keydown.enter.native="login" autofocus>
-                                    <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)" />
-                                </a-input>
-                            </a-form-item>
-                            <a-form-item>
-                                <a-input type="password" v-model.trim="user.password"
-                                    placeholder='{{ i18n "password" }}' @keydown.enter.native="login">
-                                    <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)" />
-                                </a-input>
-                            </a-form-item>
-                            <a-form-item>
-                                <a-button block @click="login" :loading="loading">{{ i18n "login" }}</a-button>
-                            </a-form-item>
-                        </a-form>
-                    </a-col>
-                </a-row>
-            </a-layout-content>
-        </transition>
+        <a-layout-content>
+            <div class="login-container">
+                <h1>{{ .title }}</h1>
+                <a-form>
+                    <a-form-item>
+                        <a-input v-model.trim="user.username" placeholder='{{ i18n "username" }}'
+                            @keydown.enter.native="login" autofocus>
+                            <a-icon slot="prefix" type="user" class="input-icon" />
+                        </a-input>
+                    </a-form-item>
+                    <a-form-item>
+                        <a-input type="password" v-model.trim="user.password"
+                            placeholder='{{ i18n "password" }}' @keydown.enter.native="login">
+                            <a-icon slot="prefix" type="lock" class="input-icon" />
+                        </a-input>
+                    </a-form-item>
+                    <a-form-item>
+                        <a-button block @click="login" :loading="loading" class="login-btn">
+                            {{ i18n "login" }}
+                        </a-button>
+                    </a-form-item>
+                </a-form>
+            </div>
+        </a-layout-content>
     </a-layout>
     {{template "js" .}}
     <script>
-        const leftColor = RandomUtil.randomIntRange(0x222222, 0xFFFFFF / 2).toString(16);
-        const rightColor = RandomUtil.randomIntRange(0xFFFFFF / 2, 0xDDDDDD).toString(16);
-        const deg = RandomUtil.randomIntRange(0, 360);
-        const background = `linear-gradient(${deg}deg, #${leftColor} 10%, #${rightColor} 100%)`;
+        // Create a more sophisticated gradient background
+        const hue1 = RandomUtil.randomIntRange(180, 270); // Blues/Purples
+        const hue2 = hue1 + RandomUtil.randomIntRange(30, 90); // Complementary hue
+        const background = `linear-gradient(135deg, 
+            hsl(${hue1}, 80%, 25%) 0%, 
+            hsl(${hue1 + 30}, 70%, 35%) 50%, 
+            hsl(${hue2}, 60%, 45%) 100%)`;
         document.querySelector('#app').style.background = background;
+
         const app = new Vue({
             delimiters: ['[[', ']]'],
             el: '#app',
@@ -80,11 +153,34 @@
                     const msg = await HttpUtil.post('/login', this.user);
                     this.loading = false;
                     if (msg.success) {
-                        location.href = basePath + 'xui/';
+                        // Add a fade-out animation before redirecting
+                        document.querySelector('.login-container').style.opacity = 0;
+                        document.querySelector('.login-container').style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            location.href = basePath + 'xui/';
+                        }, 300);
+                    } else {
+                        // Add a shake animation for failed login
+                        const container = document.querySelector('.login-container');
+                        container.style.animation = 'shake 0.5s';
+                        setTimeout(() => {
+                            container.style.animation = '';
+                        }, 500);
                     }
                 }
             }
         });
+
+        // Add shake animation style
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 
