@@ -4,12 +4,90 @@
 <style>
     @media (min-width: 769px) {
         .ant-layout-content {
-            margin: 24px 16px;
+            margin: 24px 24px;
+            padding: 10px;
         }
     }
-
-    .ant-col-sm-24 {
-        margin-top: 10px;
+    
+    .dashboard-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border: none;
+        animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-title {
+        font-weight: 500;
+        margin-bottom: 16px;
+        font-size: 16px;
+        color: #555;
+    }
+    
+    .ant-tag {
+        border-radius: 6px;
+        padding: 4px 8px;
+        margin-right: 8px;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    
+    .clickable-tag {
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .clickable-tag:hover {
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .dashboard-section {
+        animation-duration: 0.6s;
+        animation-fill-mode: both;
+        animation-name: fadeIn;
+    }
+    
+    .dashboard-section:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+    
+    .stats-row {
+        display: flex;
+        align-items: center;
+    }
+    
+    .stats-icon {
+        margin-right: 10px;
+        font-size: 18px;
+    }
+    
+    .stats-value {
+        font-weight: 500;
+        font-size: 15px;
+    }
+    
+    .progress-title {
+        margin-top: 8px;
+        text-align: center;
+        font-weight: 500;
+    }
+    
+    .progress-value {
+        font-size: 13px;
+        color: #666;
     }
 </style>
 
@@ -19,180 +97,197 @@
         <a-layout id="content-layout">
             <a-layout-content>
                 <a-spin :spinning="spinning" :delay="200" :tip="loadingTip" />
-                <transition name="list" appear>
-                    <a-row>
-                        <a-card hoverable>
-                            <a-row>
-                                <a-col :sm="24" :md="12">
-                                    <a-row>
-                                        <a-col :span="12" style="text-align: center">
-                                            <a-progress type="dashboard" status="normal"
-                                                :stroke-color="status.cpu.color"
-                                                :percent="status.cpu.percent"></a-progress>
-                                            <div>CPU</div>
-                                        </a-col>
-                                        <a-col :span="12" style="text-align: center">
-                                            <a-progress type="dashboard" status="normal"
-                                                :stroke-color="status.mem.color"
-                                                :percent="status.mem.percent"></a-progress>
-                                            <div>
-                                                内存: [[ sizeFormat(status.mem.current) ]] / [[
-                                                sizeFormat(status.mem.total) ]]
-                                            </div>
-                                        </a-col>
-                                    </a-row>
+                <a-row class="dashboard-section" gutter="16">
+                    <a-col :xs="24" :lg="24">
+                        <a-card class="dashboard-card">
+                            <div slot="title" class="card-title">系统资源监控</div>
+                            <a-row :gutter="[16, 16]">
+                                <a-col :xs="24" :sm="12" :md="6">
+                                    <div style="text-align: center">
+                                        <a-progress type="dashboard" status="normal"
+                                            :stroke-color="status.cpu.color"
+                                            :percent="status.cpu.percent"
+                                            :width="120"
+                                            stroke-linecap="round"></a-progress>
+                                        <div class="progress-title">CPU
+                                            <span class="progress-value">([[ status.cpu.percent ]]%)</span>
+                                        </div>
+                                    </div>
                                 </a-col>
-                                <a-col :sm="24" :md="12">
-                                    <a-row>
-                                        <a-col :span="12" style="text-align: center">
-                                            <a-progress type="dashboard" status="normal"
-                                                :stroke-color="status.swap.color"
-                                                :percent="status.swap.percent"></a-progress>
-                                            <div>
-                                                swap: [[ sizeFormat(status.swap.current) ]] / [[
-                                                sizeFormat(status.swap.total) ]]
-                                            </div>
-                                        </a-col>
-                                        <a-col :span="12" style="text-align: center">
-                                            <a-progress type="dashboard" status="normal"
-                                                :stroke-color="status.disk.color"
-                                                :percent="status.disk.percent"></a-progress>
-                                            <div>
-                                                硬盘: [[ sizeFormat(status.disk.current) ]] / [[
-                                                sizeFormat(status.disk.total) ]]
-                                            </div>
-                                        </a-col>
-                                    </a-row>
+                                <a-col :xs="24" :sm="12" :md="6">
+                                    <div style="text-align: center">
+                                        <a-progress type="dashboard" status="normal"
+                                            :stroke-color="status.mem.color"
+                                            :percent="status.mem.percent"
+                                            :width="120"
+                                            stroke-linecap="round"></a-progress>
+                                        <div class="progress-title">内存
+                                            <span class="progress-value">([[ sizeFormat(status.mem.current) ]] / [[
+                                                sizeFormat(status.mem.total) ]])</span>
+                                        </div>
+                                    </div>
+                                </a-col>
+                                <a-col :xs="24" :sm="12" :md="6">
+                                    <div style="text-align: center">
+                                        <a-progress type="dashboard" status="normal"
+                                            :stroke-color="status.swap.color"
+                                            :percent="status.swap.percent"
+                                            :width="120"
+                                            stroke-linecap="round"></a-progress>
+                                        <div class="progress-title">SWAP
+                                            <span class="progress-value">([[ sizeFormat(status.swap.current) ]] / [[
+                                                sizeFormat(status.swap.total) ]])</span>
+                                        </div>
+                                    </div>
+                                </a-col>
+                                <a-col :xs="24" :sm="12" :md="6">
+                                    <div style="text-align: center">
+                                        <a-progress type="dashboard" status="normal"
+                                            :stroke-color="status.disk.color"
+                                            :percent="status.disk.percent"
+                                            :width="120"
+                                            stroke-linecap="round"></a-progress>
+                                        <div class="progress-title">硬盘
+                                            <span class="progress-value">([[ sizeFormat(status.disk.current) ]] / [[
+                                                sizeFormat(status.disk.total) ]])</span>
+                                        </div>
+                                    </div>
                                 </a-col>
                             </a-row>
                         </a-card>
-                    </a-row>
-                </transition>
-                <transition name="list" appear>
-                    <a-row>
-                        <a-col :sm="24" :md="12">
-                            <a-card hoverable>
-                                xray 状态:
-                                <a-tag :color="status.xray.color">[[ status.xray.state ]]</a-tag>
-                                <a-tooltip v-if="status.xray.state === State.Error">
-                                    <template slot="title">
-                                        <p v-for="line in status.xray.errorMsg.split('\n')">[[ line ]]</p>
-                                    </template>
-                                    <a-icon type="question-circle" theme="filled"></a-icon>
-                                </a-tooltip>
-                                <a-tag color="green" @click="openSelectV2rayVersion">[[ status.xray.version ]]</a-tag>
-                                <a-tag color="blue" style="cursor: pointer;" @click="stopXrayService">停止</a-tag>
-                                <a-tag color="blue" style="cursor: pointer;" @click="restartXrayService">重启</a-tag>
-                                <a-tag color="blue" @click="openSelectV2rayVersion">版本切换</a-tag>
-                                <a-tag color="blue" style="cursor: pointer;" @click="openLogs(20)">查看日志</a-tag>
-                                <a-tag color="blue" style="cursor: pointer;" @click="openConfig">查看配置文件</a-tag>
-                                <a-tag color="blue" style="cursor: pointer;" @click="openBackup">备份还原</a-tag>
-                            </a-card>
-                        </a-col>
-                        <a-col :sm="24" :md="12">
-                            <a-card hoverable>
-                                运行时间:
-                                <a-tag color="green">[[ formatSecond(status.uptime) ]]</a-tag>
-                                <!-- <a-tooltip>
-                                    <template slot="title">
-                                        系统自启动以来的运行时间
-                                    </template>
-                                    <a-icon type="question-circle" theme="filled"></a-icon>
-                                </a-tooltip> -->
-                                Geo 文件:
-                                <a-tag color="blue" @click="geoipUpdate">Geoip 更新</a-tag>
-                                <a-tag color="blue" @click="geositeUpdate">Geosite 更新</a-tag>
-                            </a-card>
-                        </a-col>
-                        <a-col :sm="24" :md="12">
-                            <a-card hoverable>
-                                系统负载: [[ status.loads[0] ]] | [[ status.loads[1] ]] | [[ status.loads[2] ]]
-                            </a-card>
-                        </a-col>
-                        <a-col :sm="24" :md="12">
-                            <a-card hoverable>
-                                tcp / udp 连接数: [[ status.tcpCount ]] / [[ status.udpCount ]]
-                                <!-- <a-tooltip>
-                                    <template slot="title">
-                                        所有网卡的总连接数
-                                    </template>
-                                    <a-icon type="question-circle" theme="filled"></a-icon>
-                                </a-tooltip> -->
-                            </a-card>
-                        </a-col>
-                        <a-col :sm="24" :md="12">
-                            <a-card hoverable>
-                                <a-row>
-                                    <a-col :span="12">
-                                        <a-icon type="arrow-up"></a-icon>
-                                        [[ sizeFormat(status.netIO.up) ]] / S
-                                        <!-- <a-tooltip>
-                                            <template slot="title">
-                                                所有网卡的总上传速度
-                                            </template>
-                                            <a-icon type="question-circle" theme="filled"></a-icon>
-                                        </a-tooltip> -->
-                                    </a-col>
-                                    <a-col :span="12">
-                                        <a-icon type="arrow-down"></a-icon>
-                                        [[ sizeFormat(status.netIO.down) ]] / S
-                                        <!-- <a-tooltip>
-                                            <template slot="title">
-                                                所有网卡的总下载速度
-                                            </template>
-                                            <a-icon type="question-circle" theme="filled"></a-icon>
-                                        </a-tooltip> -->
-                                    </a-col>
-                                </a-row>
-                            </a-card>
-                        </a-col>
-                        <a-col :sm="24" :md="12">
-                            <a-card hoverable>
-                                <a-row>
-                                    <a-col :span="12">
-                                        <a-icon type="cloud-upload"></a-icon>
-                                        [[ sizeFormat(status.netTraffic.sent) ]]
-                                        <!-- <a-tooltip>
-                                            <template slot="title">
-                                                系统启动以来所有网卡的总上传流量
-                                            </template>
-                                            <a-icon type="question-circle" theme="filled"></a-icon>
-                                        </a-tooltip> -->
-                                    </a-col>
-                                    <a-col :span="12">
-                                        <a-icon type="cloud-download"></a-icon>
-                                        [[ sizeFormat(status.netTraffic.recv) ]]
-                                        <!-- <a-tooltip>
-                                            <template slot="title">
-                                                系统启动以来所有网卡的总下载流量
-                                            </template>
-                                            <a-icon type="question-circle" theme="filled"></a-icon>
-                                        </a-tooltip> -->
-                                    </a-col>
-                                </a-row>
-                            </a-card>
-                        </a-col>
-                        <a-col :sm="24" :md="12">
-                            <a-card hoverable>
-                                x-ui 版本:
-                                <a-tag color="green">{{ .cur_ver }}</a-tag>
-                                GitHub 项目:
-                                <a href="https://github.com/sing-web/x-ui" target="_blank"><a-tag
-                                        color="green">sing-web/x-ui</a-tag></a>
-                            </a-card>
-                        </a-col>
-                        <a-col :sm="24" :md="12">
-                            <a-card hoverable>
-                                Telegram 频道:
-                                <a href="https://t.me/sing_web" target="_blank"><a-tag
-                                        color="blue">@sing_web</a-tag></a>
-                                Telegram 群组:
-                                <a href="https://t.me/sing_web_group" target="_blank"><a-tag
-                                        color="blue">@sing_web_group</a-tag></a>
-                            </a-card>
-                        </a-col>
-                    </a-row>
-                </transition>
+                    </a-col>
+                </a-row>
+                <a-row class="dashboard-section" :gutter="16" style="margin-top: 16px;">
+                    <a-col :xs="24" :sm="24" :md="12">
+                        <a-card class="dashboard-card">
+                            <div slot="title" class="card-title">Xray 状态</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                                <div>
+                                    <span style="font-weight: 500; margin-right: 8px;">运行状态:</span>
+                                    <a-tag :color="status.xray.color">[[ status.xray.state ]]</a-tag>
+                                    <a-tooltip v-if="status.xray.state === State.Error">
+                                        <template slot="title">
+                                            <p v-for="line in status.xray.errorMsg.split('\n')">[[ line ]]</p>
+                                        </template>
+                                        <a-icon type="question-circle" theme="filled"></a-icon>
+                                    </a-tooltip>
+                                </div>
+                                <div>
+                                    <span style="font-weight: 500; margin-right: 8px;">当前版本:</span>
+                                    <a-tag color="green" @click="openSelectV2rayVersion" class="clickable-tag">[[ status.xray.version ]]</a-tag>
+                                </div>
+                            </div>
+                            <a-divider style="margin: 15px 0;"></a-divider>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                <a-button type="primary" size="small" icon="stop" @click="stopXrayService">停止</a-button>
+                                <a-button type="primary" size="small" icon="reload" @click="restartXrayService">重启</a-button>
+                                <a-button type="primary" size="small" icon="swap" @click="openSelectV2rayVersion">版本切换</a-button>
+                                <a-button type="primary" size="small" icon="file-text" @click="openLogs(20)">查看日志</a-button>
+                                <a-button type="primary" size="small" icon="code" @click="openConfig">配置文件</a-button>
+                                <a-button type="primary" size="small" icon="save" @click="openBackup">备份还原</a-button>
+                            </div>
+                        </a-card>
+                    </a-col>
+                    
+                    <a-col :xs="24" :sm="24" :md="12">
+                        <a-card class="dashboard-card">
+                            <div slot="title" class="card-title">系统信息</div>
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                <div class="stats-row">
+                                    <a-icon type="clock-circle" class="stats-icon" style="color: #52c41a;"/>
+                                    <span style="font-weight: 500; margin-right: 8px;">运行时间:</span>
+                                    <span class="stats-value">[[ formatSecond(status.uptime) ]]</span>
+                                </div>
+                                <div class="stats-row">
+                                    <a-icon type="dashboard" class="stats-icon" style="color: #1890ff;"/>
+                                    <span style="font-weight: 500; margin-right: 8px;">系统负载:</span>
+                                    <span class="stats-value">[[ status.loads[0] ]] | [[ status.loads[1] ]] | [[ status.loads[2] ]]</span>
+                                </div>
+                                <div class="stats-row">
+                                    <a-icon type="api" class="stats-icon" style="color: #722ed1;"/>
+                                    <span style="font-weight: 500; margin-right: 8px;">连接数:</span>
+                                    <span class="stats-value">TCP: [[ status.tcpCount ]] | UDP: [[ status.udpCount ]]</span>
+                                </div>
+                                
+                                <a-divider style="margin: 10px 0;"></a-divider>
+                                
+                                <div>
+                                    <span style="font-weight: 500; margin-right: 8px;">Geo 文件:</span>
+                                    <a-button type="primary" size="small" icon="cloud-download" @click="geoipUpdate" style="margin-right: 8px;">Geoip 更新</a-button>
+                                    <a-button type="primary" size="small" icon="cloud-download" @click="geositeUpdate">Geosite 更新</a-button>
+                                </div>
+                            </div>
+                        </a-card>
+                    </a-col>
+                </a-row>
+                
+                <a-row class="dashboard-section" :gutter="16" style="margin-top: 16px;">
+                    <a-col :xs="24" :sm="12" :md="8">
+                        <a-card class="dashboard-card">
+                            <div slot="title" class="card-title">网络速率</div>
+                            <div style="display: flex; flex-direction: column; gap: 16px;">
+                                <div class="stats-row">
+                                    <a-icon type="arrow-up" class="stats-icon" theme="filled" style="color: #ff4d4f;"/>
+                                    <span style="font-weight: 500; margin-right: 8px;">上传速度:</span>
+                                    <span class="stats-value">[[ sizeFormat(status.netIO.up) ]] / S</span>
+                                </div>
+                                <div class="stats-row">
+                                    <a-icon type="arrow-down" class="stats-icon" theme="filled" style="color: #52c41a;"/>
+                                    <span style="font-weight: 500; margin-right: 8px;">下载速度:</span>
+                                    <span class="stats-value">[[ sizeFormat(status.netIO.down) ]] / S</span>
+                                </div>
+                            </div>
+                        </a-card>
+                    </a-col>
+                    
+                    <a-col :xs="24" :sm="12" :md="8">
+                        <a-card class="dashboard-card">
+                            <div slot="title" class="card-title">网络流量统计</div>
+                            <div style="display: flex; flex-direction: column; gap: 16px;">
+                                <div class="stats-row">
+                                    <a-icon type="cloud-upload" class="stats-icon" theme="filled" style="color: #ff4d4f;"/>
+                                    <span style="font-weight: 500; margin-right: 8px;">总上传:</span>
+                                    <span class="stats-value">[[ sizeFormat(status.netTraffic.sent) ]]</span>
+                                </div>
+                                <div class="stats-row">
+                                    <a-icon type="cloud-download" class="stats-icon" theme="filled" style="color: #52c41a;"/>
+                                    <span style="font-weight: 500; margin-right: 8px;">总下载:</span>
+                                    <span class="stats-value">[[ sizeFormat(status.netTraffic.recv) ]]</span>
+                                </div>
+                            </div>
+                        </a-card>
+                    </a-col>
+                    
+                    <a-col :xs="24" :sm="24" :md="8">
+                        <a-card class="dashboard-card">
+                            <div slot="title" class="card-title">项目信息</div>
+                            <div style="display: flex; flex-direction: column; gap: 16px;">
+                                <div class="stats-row">
+                                    <a-icon type="info-circle" class="stats-icon" theme="filled" style="color: #1890ff;"/>
+                                    <span style="font-weight: 500; margin-right: 8px;">x-ui 版本:</span>
+                                    <a-tag color="green">{{ .cur_ver }}</a-tag>
+                                </div>
+                                <div class="stats-row">
+                                    <a-icon type="github" class="stats-icon" style="color: #000;"/>
+                                    <span style="font-weight: 500; margin-right: 8px;">GitHub:</span>
+                                    <a href="https://github.com/sing-web/x-ui" target="_blank">
+                                        <a-tag color="green" class="clickable-tag">sing-web/x-ui</a-tag>
+                                    </a>
+                                </div>
+                                <div class="stats-row">
+                                    <a-icon type="message" class="stats-icon" style="color: #1890ff;"/>
+                                    <span style="font-weight: 500; margin-right: 8px;">Telegram:</span>
+                                    <a href="https://t.me/sing_web" target="_blank" style="margin-right: 8px;">
+                                        <a-tag color="blue" class="clickable-tag">@sing_web</a-tag>
+                                    </a>
+                                    <a href="https://t.me/sing_web_group" target="_blank">
+                                        <a-tag color="blue" class="clickable-tag">@sing_web_group</a-tag>
+                                    </a>
+                                </div>
+                            </div>
+                        </a-card>
+                    </a-col>
+                </a-row>
             </a-layout-content>
         </a-layout>
         <a-modal id="version-modal" v-model="versionModal.visible" title="xray版本切换" :closable="true"

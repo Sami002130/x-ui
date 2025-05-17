@@ -1,7 +1,51 @@
 {{define "inboundInfoModal"}}
 {{template "component/inboundInfo"}}
+<style>
+    .info-modal .ant-modal-content {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .info-modal .ant-modal-header {
+        padding: 16px 24px;
+        background-color: #f5f8fb;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .info-modal .ant-modal-title {
+        font-weight: 600;
+        font-size: 16px;
+        color: #444;
+    }
+    
+    .info-modal .ant-modal-body {
+        padding: 24px;
+    }
+    
+    .info-modal .ant-modal-footer {
+        border-top: 1px solid #f0f0f0;
+        padding: 16px 24px;
+    }
+    
+    .info-btn {
+        border-radius: 6px;
+        transition: all 0.2s;
+        height: 36px;
+    }
+    
+    .info-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .info-btn-primary {
+        background: linear-gradient(135deg, #1890ff, #13c2c2);
+        border: none;
+    }
+</style>
 <a-modal id="inbound-info-modal" v-model="infoModal.visible" title="详细信息" @ok="infoModal.ok" :closable="true"
-    :mask-closable="true" ok-text="复制链接" cancel-text='{{ i18n "close" }}' :ok-button-props="infoModal.okBtnPros">
+    :mask-closable="true" ok-text="复制链接" cancel-text='{{ i18n "close" }}' :ok-button-props="infoModal.okBtnPros"
+    class="info-modal" :cancel-button-props="{class: 'info-btn'}">
     <inbound-info :db-inbound="dbInbound" :inbound="inbound"></inbound-info>
 </a-modal>
 <script>

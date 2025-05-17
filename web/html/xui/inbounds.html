@@ -4,12 +4,96 @@
 <style>
     @media (min-width: 769px) {
         .ant-layout-content {
-            margin: 24px 16px;
+            margin: 24px 24px;
+            padding: 10px;
         }
     }
-
-    .ant-col-sm-24 {
-        margin-top: 10px;
+    
+    .inbounds-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border: none;
+        animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .inbounds-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stats-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border: none;
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    .stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+    
+    .stats-label {
+        font-weight: 500;
+        color: #666;
+    }
+    
+    .action-button {
+        margin-right: 8px;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+    
+    .action-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .search-input {
+        margin-bottom: 16px;
+        max-width: 300px;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+    
+    .search-input:hover,
+    .search-input:focus {
+        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    }
+    
+    .ant-tag {
+        border-radius: 6px;
+        padding: 2px 8px;
+        font-weight: 500;
+    }
+    
+    .ant-table-thead > tr > th {
+        background-color: #f5f8fb;
+        color: #666;
+        font-weight: 600;
+    }
+    
+    .ant-table-tbody > tr:hover > td {
+        background-color: #f0f7ff;
+    }
+    
+    .ant-table {
+        border-radius: 12px;
+        overflow: hidden;
     }
 </style>
 <body>
@@ -24,36 +108,57 @@
                     </a-tag>
                 </transition>
                 <transition name="list" appear>
-                    <a-card hoverable style="margin-bottom: 20px;">
-                        <a-row>
-                            <a-col :xs="24" :sm="24" :lg="12">
-                                总上传 / 下载：
-                                <a-tag color="green">[[ sizeFormat(total.up) ]] / [[ sizeFormat(total.down) ]]</a-tag>
+                    <a-card class="stats-card" style="margin-bottom: 20px;">
+                        <div slot="title">
+                            <span style="font-weight: 600; font-size: 16px; color: #555">流量统计概览</span>
+                        </div>
+                        <a-row :gutter="16">
+                            <a-col :xs="24" :sm="24" :md="8">
+                                <div class="stats-row">
+                                    <a-icon type="arrow-up" style="color: #ff4d4f; font-size: 18px; margin-right: 8px;" />
+                                    <span class="stats-label">总上传：</span>
+                                    <a-tag color="#ff4d4f">[[ sizeFormat(total.up) ]]</a-tag>
+                                </div>
                             </a-col>
-                            <a-col :xs="24" :sm="24" :lg="12">
-                                总用量：
-                                <a-tag color="green">[[ sizeFormat(total.up + total.down) ]]</a-tag>
+                            <a-col :xs="24" :sm="24" :md="8">
+                                <div class="stats-row">
+                                    <a-icon type="arrow-down" style="color: #52c41a; font-size: 18px; margin-right: 8px;" />
+                                    <span class="stats-label">总下载：</span>
+                                    <a-tag color="#52c41a">[[ sizeFormat(total.down) ]]</a-tag>
+                                </div>
                             </a-col>
-                            <a-col :xs="24" :sm="24" :lg="12">
-                                入站数量：
-                                <a-tag color="green">[[ dbInbounds.length ]]</a-tag>
+                            <a-col :xs="24" :sm="24" :md="8">
+                                <div class="stats-row">
+                                    <a-icon type="dashboard" style="color: #1890ff; font-size: 18px; margin-right: 8px;" />
+                                    <span class="stats-label">总用量：</span>
+                                    <a-tag color="#1890ff">[[ sizeFormat(total.up + total.down) ]]</a-tag>
+                                </div>
+                            </a-col>
+                            <a-col :xs="24" :sm="24" :md="8" style="margin-top: 16px;">
+                                <div class="stats-row">
+                                    <a-icon type="apartment" style="color: #722ed1; font-size: 18px; margin-right: 8px;" />
+                                    <span class="stats-label">入站数量：</span>
+                                    <a-tag color="#722ed1">[[ dbInbounds.length ]]</a-tag>
+                                </div>
                             </a-col>
                         </a-row>
                     </a-card>
                 </transition>
                 <transition name="list" appear>
-                    <a-card hoverable>
+                    <a-card class="inbounds-card">
                         <div slot="title">
-                            <a-button type="primary" @click="openAddInbound">添加入站</a-button>
-                            <a-button type="primary" @click="resetAllTraffic">流量重置</a-button>
-                            <a-button type="primary" @click="getBackup">导出数据</a-button>
+                            <span style="font-weight: 600; font-size: 16px; color: #555; margin-right: 16px">入站管理</span>
+                            <a-button type="primary" icon="plus" class="action-button" @click="openAddInbound">添加入站</a-button>
+                            <a-button type="primary" icon="reload" class="action-button" @click="resetAllTraffic">流量重置</a-button>
+                            <a-button type="primary" icon="download" class="action-button" @click="getBackup">导出数据</a-button>
                         </div>
-                        <a-input v-model="searchKey" placeholder="搜索" autofocus style="max-width: 300px"></a-input>
+                        <a-input v-model="searchKey" placeholder="搜索入站..." autofocus class="search-input" prefix-icon="search"></a-input>
                         <a-table :columns="columns" :row-key="dbInbound => dbInbound.id"
                                  :data-source="searchedInbounds.length > 0 ? searchedInbounds:dbInbounds"
                                  :loading="spinning" :scroll="{ x: 1500 }"
                                  :pagination="false"
                                  style="margin-top: 20px"
+                                 :row-class-name="(_record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'"
                                  @change="() => getDBInbounds()">
                             <template slot="action" slot-scope="text, dbInbound">
                                 <a-dropdown :trigger="['click']">

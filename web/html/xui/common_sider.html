@@ -1,64 +1,188 @@
 {{define "menuItems"}}
-<a-menu-item key="{{ .base_path }}xui/">
-    <a-icon type="dashboard"></a-icon>
-    <span>系统状态</span>
+<a-menu-item key="{{ .base_path }}xui/" class="menu-item">
+    <a-icon type="dashboard" class="menu-icon"></a-icon>
+    <span class="menu-text">系统状态</span>
 </a-menu-item>
-<a-menu-item key="{{ .base_path }}xui/inbounds">
-    <a-icon type="user"></a-icon>
-    <span>入站列表</span>
+<a-menu-item key="{{ .base_path }}xui/inbounds" class="menu-item">
+    <a-icon type="user" class="menu-icon"></a-icon>
+    <span class="menu-text">入站列表</span>
 </a-menu-item>
-<a-menu-item key="{{ .base_path }}xui/setting">
-    <a-icon type="setting"></a-icon>
-    <span>面板设置</span>
+<a-menu-item key="{{ .base_path }}xui/setting" class="menu-item">
+    <a-icon type="setting" class="menu-icon"></a-icon>
+    <span class="menu-text">面板设置</span>
 </a-menu-item>
-<a-sub-menu>
+<a-sub-menu class="menu-sub">
     <template slot="title">
-        <a-icon type="link"></a-icon>
-        <span>相关说明</span>
+        <a-icon type="link" class="menu-icon"></a-icon>
+        <span class="menu-text">相关说明</span>
     </template>
-    <a-menu-item key="https://sing-web-docs.pages.dev/x-ui">
-        <a-icon type="home"></a-icon>
-        <span>项目文档</span>
+    <a-menu-item key="https://sing-web-docs.pages.dev/x-ui" class="menu-item sub-menu-item">
+        <a-icon type="home" class="menu-icon"></a-icon>
+        <span class="menu-text">项目文档</span>
     </a-menu-item>
-    <a-menu-item key="https://github.com/sing-web/x-ui">
-        <a-icon type="github"></a-icon>
-        <span>GitHub 项目</span>
+    <a-menu-item key="https://github.com/sing-web/x-ui" class="menu-item sub-menu-item">
+        <a-icon type="github" class="menu-icon"></a-icon>
+        <span class="menu-text">GitHub 项目</span>
     </a-menu-item>
-    <a-menu-item key="https://t.me/sing_web">
-        <a-icon type="notification"></a-icon>
-        <span>Telegram 频道</span>
+    <a-menu-item key="https://t.me/sing_web" class="menu-item sub-menu-item">
+        <a-icon type="notification" class="menu-icon"></a-icon>
+        <span class="menu-text">Telegram 频道</span>
     </a-menu-item>
-    <a-menu-item key="https://t.me/sing_web_group">
-        <a-icon type="team"></a-icon>
-        <span>Telegram 群组</span>
+    <a-menu-item key="https://t.me/sing_web_group" class="menu-item sub-menu-item">
+        <a-icon type="team" class="menu-icon"></a-icon>
+        <span class="menu-text">Telegram 群组</span>
     </a-menu-item>
 </a-sub-menu>
-<a-menu-item key="{{ .base_path }}logout">
-    <a-icon type="logout"></a-icon>
-    <span>退出登录</span>
+<a-menu-item key="{{ .base_path }}logout" class="menu-item">
+    <a-icon type="logout" class="menu-icon"></a-icon>
+    <span class="menu-text">退出登录</span>
 </a-menu-item>
 {{end}}
 
 
 {{define "commonSider"}}
+<style>
+    /* Sidebar styles */
+    #sider {
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+        overflow: hidden;
+    }
+    
+    #sider .ant-layout-sider-children {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .logo-container {
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+    }
+    
+    .logo-text {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        margin-left: 10px;
+        white-space: nowrap;
+        background: linear-gradient(90deg, #ffffff, #b3e5fc);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    /* Menu styles */
+    .ant-menu.ant-menu-dark {
+        background: linear-gradient(180deg, #001529, #001f3d);
+    }
+    
+    .menu-item {
+        margin: 4px 0 !important;
+        height: 50px !important;
+        line-height: 50px !important;
+        border-radius: 0 25px 25px 0 !important;
+        transition: all 0.3s ease !important;
+        overflow: hidden;
+    }
+    
+    .ant-menu-dark .ant-menu-item-selected {
+        background: linear-gradient(90deg, #1890ff, #52c41a) !important;
+    }
+    
+    .menu-icon {
+        margin-right: 10px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+    
+    .ant-menu-item:hover .menu-icon,
+    .ant-menu-submenu-title:hover .menu-icon,
+    .ant-menu-item-selected .menu-icon {
+        transform: scale(1.2);
+    }
+    
+    .menu-text {
+        font-size: 14px;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+    
+    /* Mobile drawer styles */
+    #sider-drawer .ant-drawer-body {
+        padding: 0;
+        background: linear-gradient(180deg, #f8f8f8, #ffffff);
+    }
+    
+    .drawer-handle {
+        position: absolute;
+        top: 15px;
+        right: -40px;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+        border-radius: 0 4px 4px 0;
+        z-index: 1;
+        transition: all 0.3s ease;
+    }
+    
+    .drawer-handle:hover {
+        background: #e6f7ff;
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .menu-item {
+        animation: fadeIn 0.3s ease-out;
+        animation-fill-mode: both;
+    }
+    
+    .menu-item:nth-child(1) { animation-delay: 0.1s; }
+    .menu-item:nth-child(2) { animation-delay: 0.15s; }
+    .menu-item:nth-child(3) { animation-delay: 0.2s; }
+    .menu-item:nth-child(4) { animation-delay: 0.25s; }
+    .menu-item:nth-child(5) { animation-delay: 0.3s; }
+</style>
+
 <a-layout-sider id="sider" collapsible breakpoint="md" collapsed-width="0">
-    <a-menu theme="dark" mode="inline" :selected-keys="['{{ .request_uri }}']"
+    <div class="logo-container">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBmaWxsPSIjZmZmZmZmIj48cGF0aCBkPSJNMjE2IDQwNi42VjEwNS40YzAgLTguOCAtNy4yIC0xNi0xNiAtMTZoLTgwYy04LjggMCAtMTYgNy4yIC0xNiAxNnYzMDEuMkM4OS43IDQxMi44IDgxLjMgNDE2IDgwIDQxNnMtOS43IC0zLjIgLTI0IC05LjRWMTA1LjRjMCAtMjYuNSAyMS41IC00OCA0OCAtNDhoODBjMjYuNSAwIDQ4IDIxLjUgNDggNDh2MzAxLjJjLTE0LjMgNi4yIC0yMi43IDkuNCAtMjQgOS40UzIzMC4zIDQxMi44IDIxNiA0MDYuNnpNMjU2IDQyMS42YzAtMjYuNSAyMS41LTQ4IDQ4LTQ4aDE1MC4yYy04LjUgLTMuNyAtMTcuMy03LjEgLTI2LjItMTAuNGMtMTMuNy01LjIgLTI4IC05LjggLTQyLjcgLTEzLjhjLTQuNSAtMS4yIC03LjEgLTUuNyAtNS45IC0xMC4ycy41LjcgLTguMCAyLjl2LTY1LjNjMjMuMSA2LjkgNDcuNiAxMC40IDcyIDEwLjR2LTU0LjJjMCAtOC44IC03LjIgLTE2IC0xNiAtMTZoLTI0VjE2MGg1Nmg0TDUxMiAyNTYuMnY1MS4yTDQ2NCAxNTAuMWwwIDEwMS41SDQwOHY1Ny4zYzI0LjQgMCA0OC45IC0zLjUgNzIgLTEwLjR2NjUuM2MtMjMuMSA2LjkgLTQ3LjYgMTAuNCAtNzIgMTAuNGMtMjEuNSAwIC00Mi43IC0zLjAgLTYzLjQgLTguN1Y0MjAuMGgyNGM4LjggMCAxNiAtNy4yIDE2IC0xNlYzNDAuN2MtMTkuMSAtNy44IC0zNy42IC0xNi41IC01NC45IC0yNi4yYzE3LjUgLTguNiAzNi4xIC0xNi40IDU1LS4yIC0yMy4zgpjMTAuNi0zLjYgMjEuNC02LjggMzIuNS05LjV2LTMyLjRjLTY1LjAgNS0xMjYuMiAyMi4yIC0xNzYuNyA1MC45di0zOS43YzM4LjYgLTI0LjcgODMuNC00MS45IDEzMS41LTQ5LjlWMjAxLjhjLTQ4LjUgOC4yIC05My43IDI1LjkgLTEzMi42IDUxLjF2LTQwLjRjNTAuMSAtMzAuMyAxMTIuMS00OC42IDE3Ny44IC01NC4zdjMyLjVDMzcyLjkgMTUyLjQgMzU1LjMgMTY3LjAgMzQwIDEzNCAyOTkuMWgzNi42YzI1LjQgMCAzMS44IC0yMS4xIDQxLjMgLTQ0LjFDMzc0LjMgODIuMzM2IDM0OC44IDgwIDMyMCA4MEgxNTZjLTgxLjUgMCAtMTQ4LjIgNjEuMSAtMTU2IDEzOS44Yy02LjkgNzAuMyAyNC4zIDEzNi4zIDc3LjMgMTc4YzIwLjEgMTUuOCA0Mi41IDI4LjEgNjcuNCgzOS4xIDkuNzcgMi4zMjggMTguOSA2LjM1NyAyOC4xIDEwLjRjMjUuNiAxMS4xIDUyLjUgMTkuNCA4Mi4xIDIxLjVjMTMuOC45OTYgMjcuOSAtLjA0NyA0MS42IC0yLjEyNWMxNS41IC0yLjM0IDMwLjggLTYuNjQgNDUuOCAtMTEuMkMyNzMuOCA0NDkuMSAyNTYgNDM3LjYgMjU2IDQyMS42eiIvPjwvc3ZnPg==" width="28" height="28" alt="Logo">
+        <span class="logo-text">X-UI 控制面板</span>
+    </div>
+    <a-menu theme="dark" mode="inline" :selected-keys="['{{ .request_uri }}']" 
         @click="({key}) => key.startsWith('http') ? window.open(key) : location.href = key">
         {{template "menuItems" .}}
     </a-menu>
 </a-layout-sider>
+
 <a-drawer id="sider-drawer" placement="left" :closable="false" @close="siderDrawer.close()"
     :visible="siderDrawer.visible" :wrap-style="{ padding: 0 }">
     <div class="drawer-handle" @click="siderDrawer.change()" slot="handle">
         <a-icon :type="siderDrawer.visible ? 'close' : 'menu-fold'"></a-icon>
     </div>
-    <a-menu theme="light" mode="inline" :selected-keys="['{{ .request_uri }}']"
+    <div class="logo-container" style="background: #f0f2f5; border-bottom: 1px solid #f0f0f0;">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBmaWxsPSIjMDAxNTI5Ij48cGF0aCBkPSJNMjE2IDQwNi42VjEwNS40YzAgLTguOCAtNy4yIC0xNiAtMTYgLTE2aC04MGMtOC44IDAgLTE2IDcuMiAtMTYgMTZ2MzAxLjJDODkuNyA0MTIuOCA4MS4zIDQxNiA4MCA0MTZzLTkuNyAtMy4yIC0yNCAtOS40VjEwNS40YzAgLTI2LjUgMjEuNSAtNDggNDggLTQ4aDgwYzI2LjUgMCA0OCAyMS41IDQ4IDQ4djMwMS4yYy0xNC4zIDYuMiAtMjIuNyA5LjQgLTI0IDkuNFMyMzAuMyA0MTIuOCAyMTYgNDA2LjZ6TTI1NiA0MjEuNmMwLTI2LjUgMjEuNS00OCA0OC00OGgxNTAuMmMtOC41IC0zLjcgLTE3LjMtNy4xIC0yNi4yLTEwLjRjLTEzLjctNS4yIC0yOCAtOS44IC00Mi43IC0xMy44Yy00LjUgLTEuMiAtNy4xIC01LjcgLTUuOSAtMTAuMnM1LjcgLTguMCAyLjl2LTY1LjNjMjMuMSA2LjkgNDcuNiAxMC40IDcyIDEwLjR2LTU0LjJjMCAtOC44IC03LjIgLTE2IC0xNiAtMTZoLTI0VjE2MGg1Nmg0TDUxMiAyNTYuMnY1MS4yTDQ2NCAxNTAuMWwwIDEwMS41SDQwOHY1Ny4zYzI0LjQgMCA0OC45IC0zLjUgNzIgLTEwLjR2NjUuM2MtMjMuMSA2LjkgLTQ3LjYgMTAuNCAtNzIgMTAuNGMtMjEuNSAwIC00Mi43IC0zLjAgLTYzLjQgLTguN1Y0MjAuMGgyNGM4LjggMCAxNiAtNy4yIDE2IC0xNlYzNDAuN2MtMTkuMSAtNy44IC0zNy42IC0xNi41IC01NC45IC0yNi4yYzE3LjUgLTguNiAzNi4xIC0xNi40IDU1LS4yIC0yMy4zgpjMTAuNi0zLjYgMjEuNC02LjggMzIuNS05LjV2LTMyLjRjLTY1LjAgNS0xMjYuMiAyMi4yIC0xNzYuNyA1MC45di0zOS43YzM4LjYgLTI0LjcgODMuNC00MS45IDEzMS41LTQ5LjlWMjAxLjhjLTQ4LjUgOC4yIC05My43IDI1LjkgLTEzMi42IDUxLjF2LTQwLjRjNTAuMSAtMzAuMyAxMTIuMS00OC42IDE3Ny44IC01NC4zdjMyLjVDMzcyLjkgMTUyLjQgMzU1LjMgMTY3LjAgMzQwIDEzNCAyOTkuMWgzNi42YzI1LjQgMCAzMS44IC0yMS4xIDQxLjMgLTQ0LjFDMzc0LjMgODIuMzM2IDM0OC44IDgwIDMyMCA4MEgxNTZjLTgxLjUgMCAtMTQ4LjIgNjEuMSAtMTU2IDEzOS44Yy02LjkgNzAuMyAyNC4zIDEzNi4zIDc3LjMgMTc4YzIwLjEgMTUuOCA0Mi41IDI4LjEgNjcuNAozOS4xIDkuNzcgMi4zMjggMTguOSA2LjM1NyAyOC4xIDEwLjRjMjUuNiAxMS4xIDUyLjUgMTkuNCA4Mi4xIDIxLjVjMTMuOCAuOTk2IDI3LjkgLS4wNDcgNDEuNiAtMi4xMjVjMTUuNSAtMi4zNCAzMC44IC02LjY0IDQ1LjggLTExLjJDMjczLjggNDQ5LjEgMjU2IDQzNy42IDI1NiA0MjEuNnpcIi8+PC9zdmc+" width="28" height="28" alt="Logo">
+        <span class="logo-text" style="background: linear-gradient(90deg, #001529, #13c2c2); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">X-UI 控制面板</span>
+    </div>
+    <a-menu theme="light" mode="inline" :selected-keys="['{{ .request_uri }}']" 
         @click="({key}) => key.startsWith('http') ? window.open(key) : location.href = key">
         {{template "menuItems" .}}
     </a-menu>
 </a-drawer>
 <script>
-
     const siderDrawer = {
         visible: false,
         show() {
@@ -71,6 +195,5 @@
             this.visible = !this.visible;
         }
     };
-
 </script>
 {{end}}
