@@ -106,7 +106,7 @@ before_show_menu() {
 }
 
 install() {
-    bash <(curl -Ls https://raw.githubusercontent.com/sing-web/x-ui/master/install.sh)
+    bash <(curl -Ls https://raw.githubusercontent.com/Sami002130/x-ui/main/install.sh)
     if [[ $? == 0 ]]; then
         if [[ $# == 0 ]]; then
             start
@@ -125,7 +125,7 @@ update() {
         fi
         return 0
     fi
-    bash <(curl -Ls https://raw.githubusercontent.com/sing-web/x-ui/master/install.sh)
+    bash <(curl -Ls https://raw.githubusercontent.com/Sami002130/x-ui/main/install.sh)
     if [[ $? == 0 ]]; then
         LOGI "The update is complete and the panel has been automatically restarted"
         exit 0
@@ -309,7 +309,7 @@ install_bbr() {
 }
 
 update_shell() {
-    wget -O /usr/bin/x-ui -N --no-check-certificate https://github.com/sing-web/x-ui/raw/master/x-ui.sh
+    wget -O /usr/bin/x-ui -N --no-check-certificate https://github.com/Sami002130/x-ui/raw/main/x-ui.sh
     if [[ $? != 0 ]]; then
         echo ""
         LOGE "Download script failed, please check if you can connect to Github on your local machine"
@@ -416,10 +416,10 @@ show_xray_status() {
 }
 
 ssl_cert_issue() {
-    wget -N --no-check-certificate https://raw.githubusercontent.com/Misaka-blog/acme-script/main/acme.sh && bash acme.sh
+    wget -N --no-check-certificate https://raw.githubusercontent.com/Sami002130/x-ui/main/acme.sh && bash acme.sh
 }
 
-open_ports(){
+open_ports() {
     systemctl stop firewalld.service 2>/dev/null
     systemctl disable firewalld.service 2>/dev/null
     setenforce 0 2>/dev/null
